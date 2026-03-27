@@ -1,0 +1,62 @@
+.header-container {
+    padding: 20px;
+    background-color: #ffffff;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.header-title {
+    color: #172b4d;
+    font-size: 24px;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.header-cards {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.header-card {
+    flex: 1;
+    background-color: #f4f5f7;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 1px 3px rgba(9, 30, 66, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border: 1px solid #dfe1e6;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.header-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(9, 30, 66, 0.15);
+}
+
+.card-title {
+    color: #5e6c84;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.card-value {
+    color: #0052cc;
+    font-size: 36px;
+    font-weight: bold;
+}
+
+.card-value.warning {
+    color: #ff991f;
+}
+
+.card-value.success {
+    color: #006644;
+}

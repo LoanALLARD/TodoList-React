@@ -8,22 +8,19 @@ import Footer from "./Components/Footer/Footer";
 import Backup from "./data/backup.json";
 
 function App() {
-    const [showForm, setShowForm] = useState(false);
-
     return (
         <div className="App">
+            {/* Header */}
             <Header />
-            <button onClick={() => setShowForm(!showForm)}>
-                Créer une tâche
-            </button>
-            {showForm && (
-                <TaskForm
-                    onSubmit={(task) =>
-                        console.log("Nouvelle tâche ajoutée:", task)
-                    }
-                />
+
+            {/* Liste des tâches */}
+            {!Backup.taches || Backup.taches.length === 0 ? (
+                <p>Aucune tâche à afficher.</p>
+            ) : (
+                <TaskList tasks={Backup.taches} />
             )}
-            <TaskList tasks={Backup.taches} />
+
+            {/* Footer */}
             <Footer />
         </div>
     );
