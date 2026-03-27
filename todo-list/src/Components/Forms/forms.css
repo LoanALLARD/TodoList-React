@@ -1,0 +1,77 @@
+.modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    text-align: left;
+}
+
+.form-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #5e6c84;
+    margin: 0;
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+    padding: 10px;
+    border: 2px solid #dfe1e6;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #172b4d;
+    background-color: #fafbfc;
+    font-family: inherit;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+    background-color: #ffffff;
+    border-color: #4c9aff;
+    outline: none;
+}
+
+.form-textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.form-select[multiple] {
+    height: auto;
+    min-height: 90px;
+}
+
+.form-color-picker {
+    width: 60px;
+    height: 40px;
+    padding: 2px;
+    border: 2px solid #dfe1e6;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.form-submit-btn {
+    background-color: #0052cc;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 4px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.2s ease;
+}
+
+.form-submit-btn:hover {
+    background-color: #0065ff;
+}

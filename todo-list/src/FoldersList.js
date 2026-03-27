@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./TasksList.css";
-import FolderForm from "./Components/Forms/FolderForm";
+import FolderForm from "./Components/Forms/FolderForm/FolderForm";
 import Modal from "./Components/Modals/Modal";
 import { Trash2, Pencil } from "lucide-react";
 
