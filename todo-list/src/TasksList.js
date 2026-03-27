@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import "./TasksList.css";
 import TaskForm from "./Components/Forms/TaskForm";
+import FolderForm from "./Components/Forms/FolderForm";
+import Modal from "./Components/Modals/Modal";
 
 export default function TaskList({ tasks }) {
     const [searchTerm, setSearchTerm] = useState("");
     const [statusFilter, setStatusFilter] = useState("");
+    const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
+    const [isFolderModalOpen, setIsFolderModalOpen] = useState(false);
 
     // Logique de filtrage (préparée pour l'avenir)
     const filteredTasks = tasks.filter((task) => {
@@ -14,8 +18,6 @@ export default function TaskList({ tasks }) {
         const matchStatus = statusFilter === "" || task.etat === statusFilter;
         return matchSearch && matchStatus;
     });
-
-    const [showForm, setShowForm] = useState(false);
 
     return (
         <div className="jira-task-list-container">
@@ -40,16 +42,42 @@ export default function TaskList({ tasks }) {
                     <option value="En cours">En cours</option>
                     <option value="À faire">À faire</option>
                 </select>
-                {/*<button onClick={() => setShowForm(!showForm)}>
+                <button
+                    onClick={() => setIsTaskModalOpen(true)}
+                    className="create-task-btn"
+                >
                     Créer une tâche
                 </button>
-                {showForm && (
+                <button
+                    onClick={() => setIsFolderModalOpen(true)}
+                    className="create-task-btn"
+                >
+                    Créer un dossier
+                </button>
+                <Modal
+                    isOpen={isTaskModalOpen}
+                    onClose={() => setIsTaskModalOpen(false)}
+                    title="Nouvelle tâche"
+                >
                     <TaskForm
-                        onSubmit={(task) =>
-                            console.log("Nouvelle tâche ajoutée:", task)
-                        }
+                        onSubmit={(task) => {
+                            console.log("Nouvelle tâche ajoutée:", task);
+                            setIsTaskModalOpen(false);
+                        }}
                     />
-                )}*/}
+                </Modal>
+                <Modal
+                    isOpen={isFolderModalOpen}
+                    onClose={() => setIsFolderModalOpen(false)}
+                    title="Nouveau dossier"
+                >
+                    <FolderForm
+                        onSubmit={(folder) => {
+                            console.log("Nouveau dossier ajouté:", folder);
+                            setIsFolderModalOpen(false);
+                        }}
+                    />
+                </Modal>
             </div>
 
             {filteredTasks.length === 0 ? (
@@ -58,9 +86,10 @@ export default function TaskList({ tasks }) {
                 <ul className="jira-task-list">
                     {/* En-tête de la "table" */}
                     <li className="jira-task-item jira-task-header">
-                        <div>Clé</div>
-                        <div>Résumé</div>
+                        <div>ID</div>
+                        <div>Description</div>
                         <div>État</div>
+                        <div>Création</div>
                         <div>Échéance</div>
                         <div>Assigné à</div>
                     </li>
