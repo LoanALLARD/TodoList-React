@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./TasksList.css";
 import FolderForm from "./Components/Forms/FolderForm";
 import Modal from "./Components/Modals/Modal";
+import { Trash2, Pencil } from "lucide-react";
 
 export default function FoldersList({ initialFolders }) {
     const [folders, setFolders] = useState(initialFolders || []);
@@ -144,24 +145,21 @@ export default function FoldersList({ initialFolders }) {
                                         cursor: "pointer",
                                         background: "none",
                                         border: "none",
-                                        fontSize: "16px",
                                     }}
                                     title="Modifier"
                                 >
-                                    ✏️
+                                    <Pencil size={15} />
                                 </button>
                                 <button
                                     onClick={() => handleDelete(folder.id)}
                                     style={{
                                         cursor: "pointer",
-                                        color: "red",
                                         background: "none",
                                         border: "none",
-                                        fontSize: "16px",
                                     }}
                                     title="Supprimer"
                                 >
-                                    🗑️
+                                    <Trash2 size={15} />
                                 </button>
                             </div>
                         </li>

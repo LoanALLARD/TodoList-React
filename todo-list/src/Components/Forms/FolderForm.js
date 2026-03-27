@@ -22,8 +22,7 @@ export default function FolderForm({ onSubmit, initialData }) {
                 required
             />
             <p>Description du dossier</p>
-            <input
-                type="text"
+            <textarea
                 id="description"
                 name="description"
                 placeholder="Description..."

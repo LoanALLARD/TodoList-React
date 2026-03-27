@@ -25,13 +25,14 @@ export default function TaskForm({ onSubmit }) {
         <form onSubmit={handleSubmit}>
             <p>Intutilé de la tâche</p>
             <input type="text" name="task" placeholder="Intitulé..." required />
+
             <p>Description de la tâche</p>
-            <input
-                type="text"
+            <textarea
                 name="description"
                 placeholder="Description..."
                 required
             />
+
             <p>Date d'échéance</p>
             <input type="date" name="dueDate" required />
 
@@ -51,6 +52,7 @@ export default function TaskForm({ onSubmit }) {
                         </option>
                     ))}
             </select>
+
             <button type="submit">Valider la création</button>
         </form>
     );
