@@ -1,4 +1,4 @@
-import { ETATS } from "../data/etats";
+import { ETATS } from "../../data/etats";
 
 export default function TaskForm({ onSubmit }) {
     const handleSubmit = (event) => {
@@ -18,14 +18,6 @@ export default function TaskForm({ onSubmit }) {
             assignees,
             status,
         });
-        console.log(
-            task,
-            description,
-            creationDate,
-            dueDate,
-            assignees,
-            status,
-        );
         event.target.reset();
     };
 
