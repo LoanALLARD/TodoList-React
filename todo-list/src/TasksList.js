@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import "./TasksList.css";
 import TaskForm from "./Components/Forms/TaskForm";
-import FolderForm from "./Components/Forms/FolderForm";
 import Modal from "./Components/Modals/Modal";
+import { ETATS } from "./data/etats";
 
 export default function TaskList({ tasks }) {
     const [searchTerm, setSearchTerm] = useState("");
     const [statusFilter, setStatusFilter] = useState("");
     const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
-    const [isFolderModalOpen, setIsFolderModalOpen] = useState(false);
 
     // Logique de filtrage (préparée pour l'avenir)
     const filteredTasks = tasks.filter((task) => {
@@ -21,7 +20,15 @@ export default function TaskList({ tasks }) {
 
     return (
         <div className="jira-task-list-container">
-            <h2>Liste des tâches</h2>
+            <h2
+                style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                }}
+            >
+                Liste des tâches
+            </h2>
 
             {/* Zone d'en-tête / Filtres */}
             <div className="jira-filters-header">
@@ -38,21 +45,18 @@ export default function TaskList({ tasks }) {
                     onChange={(e) => setStatusFilter(e.target.value)}
                 >
                     <option value="">Tous les statuts</option>
-                    <option value="Réussi">Réussi</option>
-                    <option value="En cours">En cours</option>
-                    <option value="À faire">À faire</option>
+                    {ETATS &&
+                        Object.values(ETATS).map((etat) => (
+                            <option key={etat} value={etat}>
+                                {etat}
+                            </option>
+                        ))}
                 </select>
                 <button
                     onClick={() => setIsTaskModalOpen(true)}
                     className="create-task-btn"
                 >
                     Créer une tâche
-                </button>
-                <button
-                    onClick={() => setIsFolderModalOpen(true)}
-                    className="create-task-btn"
-                >
-                    Créer un dossier
                 </button>
                 <Modal
                     isOpen={isTaskModalOpen}
@@ -63,18 +67,6 @@ export default function TaskList({ tasks }) {
                         onSubmit={(task) => {
                             console.log("Nouvelle tâche ajoutée:", task);
                             setIsTaskModalOpen(false);
-                        }}
-                    />
-                </Modal>
-                <Modal
-                    isOpen={isFolderModalOpen}
-                    onClose={() => setIsFolderModalOpen(false)}
-                    title="Nouveau dossier"
-                >
-                    <FolderForm
-                        onSubmit={(folder) => {
-                            console.log("Nouveau dossier ajouté:", folder);
-                            setIsFolderModalOpen(false);
                         }}
                     />
                 </Modal>
