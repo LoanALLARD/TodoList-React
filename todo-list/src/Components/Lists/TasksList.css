@@ -1,10 +1,10 @@
-.jira-task-list-container {
+.app-task-list-container {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     margin: 20px auto;
     max-width: 1000px;
 }
 
-.jira-filters-header {
+.app-filters-header {
     display: flex;
     gap: 15px;
     margin-bottom: 20px;
@@ -28,7 +28,7 @@
     box-shadow: 0 0 0 2px rgba(76, 154, 255, 0.2);
 }
 
-.jira-task-list {
+.app-task-list {
     list-style-type: none;
     padding: 0;
     margin: 0;
@@ -38,7 +38,7 @@
     box-shadow: 0 1px 1px rgba(9, 30, 66, 0.05);
 }
 
-.jira-task-item {
+.app-task-item {
     display: grid;
     grid-template-columns: 60px 2fr 1.5fr 1fr 1fr 1fr 1.5fr;
     align-items: center;
@@ -48,16 +48,16 @@
     gap: 10px;
 }
 
-.jira-task-item:last-child {
+.app-task-item:last-child {
     border-bottom: none;
 }
 
-.jira-task-item:not(.jira-task-header):hover {
+.app-task-item:not(.app-task-header):hover {
     background-color: #fafbfc;
     cursor: pointer;
 }
 
-.jira-task-header {
+.app-task-header {
     font-weight: 600;
     color: #5e6c84;
     background-color: #f4f5f7;
@@ -66,13 +66,13 @@
     border-bottom: 2px solid #dfe1e6;
 }
 
-.jira-task-id {
+.app-task-id {
     color: #0052cc;
     font-weight: 500;
     font-size: 13px;
 }
 
-.jira-task-title {
+.app-task-title {
     color: #172b4d;
     font-size: 14px;
     white-space: nowrap;
@@ -80,7 +80,7 @@
     text-overflow: ellipsis;
 }
 
-.jira-task-status {
+.app-task-status {
     display: inline-flex;
     align-items: center;
     padding: 2px 6px;
@@ -93,19 +93,19 @@
     width: max-content;
 }
 
-.jira-task-status.success,
-.jira-task-status[data-status="Réussi"],
-.jira-task-status[data-status="Terminé"] {
+.app-task-status.success,
+.app-task-status[data-status="Réussi"],
+.app-task-status[data-status="Terminé"] {
     background-color: #e3fcef;
     color: #006644;
 }
 
-.jira-task-status[data-status="En cours"] {
+.app-task-status[data-status="En cours"] {
     background-color: #deebff;
     color: #0052cc;
 }
 
-.jira-task-assignee {
+.app-task-assignee {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -113,7 +113,7 @@
     color: #5e6c84;
 }
 
-.jira-avatar {
+.app-avatar {
     width: 24px;
     height: 24px;
     border-radius: 50%;
@@ -126,17 +126,17 @@
     font-weight: bold;
 }
 
-.jira-task-date {
+.app-task-date {
     color: #5e6c84;
     font-size: 13px;
 }
-.jira-task-folders {
+.app-task-folders {
     display: flex;
     gap: 5px;
     flex-wrap: wrap;
 }
 
-.jira-folder-tag {
+.app-folder-tag {
     color: white;
     padding: 2px 6px;
     border-radius: 4px;
@@ -144,7 +144,7 @@
     font-weight: bold;
 }
 
-.jira-folder-more {
+.app-folder-more {
     font-size: 12px;
     color: #5e6c84;
     padding: 2px;

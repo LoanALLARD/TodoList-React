@@ -118,3 +118,6 @@
   background-color: #0052cc;
   color: #fff;
 }
+.App {
+    padding-bottom: 80px; /* Make room for the floating button */
+}

@@ -1,59 +1,59 @@
-.jira-folders-header-title {
+.app-folders-header-title {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.jira-filters-header.folders-filters {
+.app-filters-header.folders-filters {
     justify-content: flex-end;
 }
 
-.jira-task-item > div {
+.app-task-item > div {
     display: flex;
     align-items: center;
 }
 
-.jira-folder-col-id {
+.app-folder-col-id {
     flex: 0 0 50px;
     font-weight: bold;
     color: #5e6c84;
 }
 
-.jira-folder-col-title {
+.app-folder-col-title {
     flex: 1;
 }
 
-.jira-folder-col-desc {
+.app-folder-col-desc {
     flex: 2;
     color: #172b4d;
 }
 
-.jira-folder-col-color {
+.app-folder-col-color {
     flex: 1;
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
-.jira-folder-col-actions {
+.app-folder-col-actions {
     flex: 0 0 100px;
     justify-content: flex-end;
 }
 
-.jira-folder-color-circle {
+.app-folder-color-circle {
     width: 16px;
     height: 16px;
     border-radius: 50%;
     border: 1px solid #ccc;
 }
 
-.jira-folder-action-btn {
+.app-folder-action-btn {
     margin-right: 10px;
     cursor: pointer;
     background: none;
     border: none;
 }
 
-.jira-folder-action-btn:last-child {
+.app-folder-action-btn:last-child {
     margin-right: 0;
 }

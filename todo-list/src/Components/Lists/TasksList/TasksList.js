@@ -1,14 +1,11 @@
 import React, { useState } from "react";
 import "../TasksList.css";
-import TaskForm from "../../Forms/TaskForm/TaskForm";
-import Modal from "../../Modals/Modal";
 import { ETATS, ETAT_TERMINE } from "../../../data/etats";
 import Backup from "../../../data/backup.json";
 
 export default function TaskList({ tasks }) {
     const [searchTerm, setSearchTerm] = useState("");
     const [statusFilter, setStatusFilter] = useState("NON_TERMINEES");
-    const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
 
     // Fonction pour récupérer les dossiers d'une tâche
     const getTaskFolders = (taskId) => {
@@ -21,9 +18,12 @@ export default function TaskList({ tasks }) {
 
     // Logique de filtrage (préparée pour l'avenir)
     let filteredTasks = tasks.filter((task) => {
+        const titleMatch = task.title ? task.title.toLowerCase() : "";
+        const idMatch = task.id ? task.id.toString() : "";
+        const searchTarget = searchTerm.toLowerCase();
+
         const matchSearch =
-            task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            task.id.toString().includes(searchTerm);
+            titleMatch.includes(searchTarget) || idMatch.includes(searchTarget);
 
         let matchStatus = true;
         if (statusFilter === "NON_TERMINEES") {
@@ -43,11 +43,11 @@ export default function TaskList({ tasks }) {
     });
 
     return (
-        <div className="jira-task-list-container">
-            <h2 className="jira-list-title">Liste des tâches</h2>
+        <div className="app-task-list-container">
+            <h2 className="app-list-title">Liste des tâches</h2>
 
             {/* Zone d'en-tête / Filtres */}
-            <div className="jira-filters-header">
+            <div className="app-filters-header">
                 <input
                     type="text"
                     placeholder="Filtrer par nom ou ID..."
@@ -71,32 +71,14 @@ export default function TaskList({ tasks }) {
                             </option>
                         ))}
                 </select>
-                <button
-                    onClick={() => setIsTaskModalOpen(true)}
-                    className="create-task-btn"
-                >
-                    Créer une tâche
-                </button>
-                <Modal
-                    isOpen={isTaskModalOpen}
-                    onClose={() => setIsTaskModalOpen(false)}
-                    title="Nouvelle tâche"
-                >
-                    <TaskForm
-                        onSubmit={(task) => {
-                            console.log("Nouvelle tâche ajoutée:", task);
-                            setIsTaskModalOpen(false);
-                        }}
-                    />
-                </Modal>
             </div>
 
             {filteredTasks.length === 0 ? (
                 <p>Aucune tâche à afficher.</p>
             ) : (
-                <ul className="jira-task-list">
+                <ul className="app-task-list">
                     {/* En-tête de la "table" */}
-                    <li className="jira-task-item jira-task-header">
+                    <li className="app-task-item app-task-header">
                         <div>ID</div>
                         <div>Description</div>
                         <div>Catégories</div>
@@ -110,19 +92,19 @@ export default function TaskList({ tasks }) {
                     {filteredTasks.map((task) => {
                         const taskFolders = getTaskFolders(task.id);
                         return (
-                            <li key={task.id} className="jira-task-item">
-                                <div className="jira-task-id">{task.id}</div>
+                            <li key={task.id} className="app-task-item">
+                                <div className="app-task-id">{task.id}</div>
                                 <div
-                                    className="jira-task-title"
+                                    className="app-task-title"
                                     title={task.title}
                                 >
                                     {task.title}
                                 </div>
-                                <div className="jira-task-folders">
+                                <div className="app-task-folders">
                                     {taskFolders.slice(0, 2).map((folder) => (
                                         <span
                                             key={folder.id}
-                                            className="jira-folder-tag"
+                                            className="app-folder-tag"
                                             style={{
                                                 backgroundColor:
                                                     folder.color || "#ccc",
@@ -132,38 +114,38 @@ export default function TaskList({ tasks }) {
                                         </span>
                                     ))}
                                     {taskFolders.length > 2 && (
-                                        <span className="jira-folder-more">
+                                        <span className="app-folder-more">
                                             +{taskFolders.length - 2}
                                         </span>
                                     )}
                                 </div>
                                 <div>
                                     <span
-                                        className="jira-task-status"
+                                        className="app-task-status"
                                         data-status={task.etat}
                                     >
                                         {task.etat || "À FAIRE"}
                                     </span>
                                 </div>
-                                <div className="jira-task-date">
+                                <div className="app-task-date">
                                     {task.date_creation
                                         ? new Date(
                                               task.date_creation,
                                           ).toLocaleDateString()
                                         : "-"}
                                 </div>
-                                <div className="jira-task-date">
+                                <div className="app-task-date">
                                     {task.date_echeance
                                         ? new Date(
                                               task.date_echeance,
                                           ).toLocaleDateString()
                                         : "-"}
                                 </div>
-                                <div className="jira-task-assignee">
+                                <div className="app-task-assignee">
                                     {task.equipiers &&
                                     task.equipiers.length > 0 ? (
                                         <>
-                                            <div className="jira-avatar">
+                                            <div className="app-avatar">
                                                 {task.equipiers[0].name
                                                     .charAt(0)
                                                     .toUpperCase()}

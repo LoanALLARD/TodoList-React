@@ -1,10 +1,9 @@
-import Backup from "../../data/backup";
 import { ETATS } from "../../data/etats";
 import "./header.css";
 
-export default function Header() {
-    const totalTasks = Backup.taches.length;
-    const pendingTasks = Backup.taches.filter(
+export default function Header({ tasks, onReset }) {
+    const totalTasks = tasks.length;
+    const pendingTasks = tasks.filter(
         (t) => t.etat !== "Réussi" && t.etat !== "Terminé",
     ).length;
 
@@ -14,7 +13,7 @@ export default function Header() {
         stats[etat] = 0;
     });
 
-    Backup.taches.forEach((t) => {
+    tasks.forEach((t) => {
         if (stats[t.etat] !== undefined) {
             stats[t.etat]++;
         } else if (!t.etat) {
@@ -51,7 +50,12 @@ export default function Header() {
 
     return (
         <header className="header-container">
-            <h1 className="header-title">Tableau de bord</h1>
+            <div className="header-top-row">
+                <h1 className="header-title">Tableau de bord</h1>
+                <button className="reset-button" onClick={onReset}>
+                    Repartir de zéro
+                </button>
+            </div>
             <div className="header-layout">
                 <div className="header-cards">
                     <div className="header-card">

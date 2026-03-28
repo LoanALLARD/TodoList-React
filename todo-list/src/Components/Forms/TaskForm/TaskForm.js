@@ -12,12 +12,12 @@ export default function TaskForm({ onSubmit }) {
         const assignees = formData.getAll("assignees");
         const status = formData.get("status");
         onSubmit({
-            task,
-            description,
-            creationDate,
-            dueDate,
-            assignees,
-            status,
+            title: task,
+            description: description || "",
+            date_creation: new Date().toISOString().split("T")[0],
+            date_echeance: dueDate,
+            etat: status,
+            equipiers: assignees.map((name) => ({ name })),
         });
         event.target.reset();
     };

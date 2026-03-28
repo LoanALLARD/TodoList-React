@@ -109,3 +109,24 @@
     color: #5e6c84;
     font-weight: 500;
 }
+.header-top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.reset-button {
+    background-color: #ffebe6;
+    color: #de350b;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.reset-button:hover {
+    background-color: #ffbdad;
+}
