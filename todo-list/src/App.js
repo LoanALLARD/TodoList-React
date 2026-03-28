@@ -33,11 +33,7 @@ function App() {
 
             {viewMode === "tasks" ? (
                 /* Liste des tâches */
-                !Backup.taches || Backup.taches.length === 0 ? (
-                    <p>Aucune tâche à afficher.</p>
-                ) : (
-                    <TaskList tasks={Backup.taches} />
-                )
+                <TaskList tasks={Backup.taches} />
             ) : (
                 /* Liste des dossiers */
                 <FoldersList initialFolders={Backup.dossiers} />
