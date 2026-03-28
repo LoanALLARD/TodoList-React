@@ -21,7 +21,7 @@ Fonctionnalités retenues pour le Todo-List :
 - ✅ En option, je peux basculer sur la vue des Dossiers à l'aide d'un bouton de mon choix ; je gère ensuite les dossiers avec les méthodes CRUD standards.
 - ❌ Juste au-dessus de la liste des Taches, si je suis en mode Tache (condition utile uniquement si option / par défaut sinon), j'ai accès aux élément de Tri / Filtre. Je peux trier par Date création, Date échéance, Nom. Je peux aussi filtrer par Dossiers (0, 1 ou n), Etats (0, 1 ou n), ou En cours (le "filtre actif par défaut") ; chaque action sur un élément du filtre en change son statut.
 - ✅ En haut de la page (Header), je vois le Nb total de Taches (sans filtre), et le Nb non finis (cf "filtre par défaut"). En option, j'ai un camembert qui me donne la répartition exacte par Etat (dans la liste des Enums).
-- ❌ En bas de page (Footer), j'ai un bouton "+" qui permet d'afficher dans une popup (composant Modal), le formulaire de création de Tache (Task). En option, je peux ajouter un Dossier (Folder).
+- ✅ En bas de page (Footer), j'ai un bouton "+" qui permet d'afficher dans une popup (composant Modal), le formulaire de création de Tache (Task). En option, je peux ajouter un Dossier (Folder).
 - ❌ Chaque Tache affiche le titre, la date d'échéance ainsi que les 2 premiers dossier ("mode Simple"). Un triangle permet de basculer en "mode Complet", ce qui affiche tous les dossiers et la description. En option, un clic sur un dossier permet d'activer un filtre dessus.
 - ❌ En mode Complet, je peux également ajouter un dossier ou basculer en mode édition afin de modifier les champs utiles (titre, description et date échéance)
 - ❌ En option, les taches dont la date d'échéance est passée depuis une semaine ne sont plus affichées

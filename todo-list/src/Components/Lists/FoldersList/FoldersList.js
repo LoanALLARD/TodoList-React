@@ -1,109 +1,57 @@
 import React, { useState } from "react";
-import "../TasksList.css";
 import "../FoldersList.css";
-import FolderForm from "../../Forms/FolderForm/FolderForm";
-import Modal from "../../Modals/Modal";
-import { Trash2, Pencil } from "lucide-react";
+import Backup from "../../../data/backup.json";
 
-export default function FoldersList({ folders, setFolders }) {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [editingFolder, setEditingFolder] = useState(null);
+export default function FoldersList({ folders }) {
+    const [searchTerm, setSearchTerm] = useState("");
 
-    const handleEditMenu = (folder) => {
-        setEditingFolder(folder);
-        setIsModalOpen(true);
-    };
+    let filteredFolders = folders.filter((folder) => {
+        const titleMatch = folder.title ? folder.title.toLowerCase() : "";
+        const idMatch = folder.id ? folder.id.toString() : "";
+        const searchTarget = searchTerm.toLowerCase();
+        return titleMatch.includes(searchTarget) || idMatch.includes(searchTarget);
+    });
 
-    const handleDelete = (id) => {
-        if (window.confirm("Êtes-vous sûr de vouloir supprimer ce dossier ?")) {
-            setFolders(folders.filter((f) => f.id !== id));
-        }
-    };
-
-    const handleSubmit = (folderData) => {
-        if (editingFolder) {
-            setFolders(
-                folders.map((f) =>
-                    f.id === editingFolder.id ? { ...f, ...folderData } : f,
-                ),
-            );
-        }
-        setIsModalOpen(false);
+    const getFolderTasksCount = (folderId) => {
+        return Backup.relations.filter((rel) => rel.dossier === folderId).length;
     };
 
     return (
-        <div className="app-task-list-container">
-            <div className="app-list-title">
-                <h2>Liste des dossiers</h2>
+        <div className="app-list-container">
+            <h2 className="app-list-title">Liste des dossiers</h2>
+
+            <div className="app-filters-header">
+                <input
+                    type="text"
+                    placeholder="Filtrer par nom ou ID..."
+                    className="filter-input"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                />
             </div>
 
-            <Modal
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                title="Modifier le dossier"
-            >
-                <FolderForm
-                    onSubmit={handleSubmit}
-                    initialData={editingFolder}
-                />
-            </Modal>
-
-            {folders.length === 0 ? (
+            {filteredFolders.length === 0 ? (
                 <p>Aucun dossier à afficher.</p>
             ) : (
-                <ul className="app-task-list">
-                    <li className="app-task-item app-task-header">
-                        <div className="app-folder-col-id">ID</div>
-                        <div className="app-folder-col-title">Intitulé</div>
-                        <div className="app-folder-col-desc">Description</div>
-                        <div className="app-folder-col-color">Couleur</div>
-                        <div className="app-folder-col-actions">Actions</div>
-                    </li>
+                <div className="cards-grid">
+                    {filteredFolders.map((folder) => (
+                        <div key={folder.id} className="item-card folder-card" style={{ borderTop: `4px solid ${folder.color || "#0366d6"}` }}>
+                            <div className="card-header">
+                                <h3 className="card-title" title={folder.title}>
+                                    {folder.title}
+                                </h3>
+                                <span className="card-id">#{folder.id}</span>
+                            </div>
 
-                    {folders.map((folder) => (
-                        <li key={folder.id} className="app-task-item">
-                            <div className="app-folder-col-id">
-                                {folder.id}
+                            <div className="card-details folder-details">
+                                <div className="detail-row">
+                                    <span className="detail-label">Nombre de tâches:</span>
+                                    <span className="folder-count">{getFolderTasksCount(folder.id)}</span>
+                                </div>
                             </div>
-                            <div
-                                className="app-task-title app-folder-col-title"
-                                title={folder.title}
-                            >
-                                {folder.title}
-                            </div>
-                            <div className="app-folder-col-desc">
-                                {folder.description || "-"}
-                            </div>
-                            <div className="app-folder-col-color">
-                                {folder.color && (
-                                    <div
-                                        className="app-folder-color-circle"
-                                        style={{
-                                            backgroundColor: folder.color,
-                                        }}
-                                    ></div>
-                                )}
-                                <span>{folder.color || "-"}</span>
-                            </div>
-                            <div className="app-folder-col-actions">
-                                <button
-                                    onClick={() => handleEditMenu(folder)}
-                                    className="app-folder-action-btn"
-                                    title="Modifier"
-                                >
-                                    <Pencil size={15} />
-                                </button>
-                                <button
-                                    onClick={() => handleDelete(folder.id)}
-                                    className="app-folder-action-btn"
-                                    title="Supprimer"
-                                >
-                                    <Trash2 size={15} />
-                                </button>
-                            </div>
-                        </li>
+                        </div>
                     ))}
-                </ul>
+                </div>
             )}
         </div>
     );

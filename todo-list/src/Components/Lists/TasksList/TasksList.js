@@ -7,7 +7,6 @@ export default function TaskList({ tasks }) {
     const [searchTerm, setSearchTerm] = useState("");
     const [statusFilter, setStatusFilter] = useState("NON_TERMINEES");
 
-    // Fonction pour récupérer les dossiers d'une tâche
     const getTaskFolders = (taskId) => {
         const relatedFolderIds = Backup.relations
             .filter((rel) => rel.tache === taskId)
@@ -16,7 +15,6 @@ export default function TaskList({ tasks }) {
         return Backup.dossiers.filter((d) => relatedFolderIds.includes(d.id));
     };
 
-    // Logique de filtrage (préparée pour l'avenir)
     let filteredTasks = tasks.filter((task) => {
         const titleMatch = task.title ? task.title.toLowerCase() : "";
         const idMatch = task.id ? task.id.toString() : "";
@@ -35,7 +33,6 @@ export default function TaskList({ tasks }) {
         return matchSearch && matchStatus;
     });
 
-    // Tri par date d'échéance décroissante
     filteredTasks.sort((a, b) => {
         if (!a.date_echeance) return 1;
         if (!b.date_echeance) return -1;
@@ -43,10 +40,9 @@ export default function TaskList({ tasks }) {
     });
 
     return (
-        <div className="app-task-list-container">
+        <div className="app-list-container">
             <h2 className="app-list-title">Liste des tâches</h2>
 
-            {/* Zone d'en-tête / Filtres */}
             <div className="app-filters-header">
                 <input
                     type="text"
@@ -76,39 +72,30 @@ export default function TaskList({ tasks }) {
             {filteredTasks.length === 0 ? (
                 <p>Aucune tâche à afficher.</p>
             ) : (
-                <ul className="app-task-list">
-                    {/* En-tête de la "table" */}
-                    <li className="app-task-item app-task-header">
-                        <div>ID</div>
-                        <div>Description</div>
-                        <div>Catégories</div>
-                        <div>État</div>
-                        <div>Création</div>
-                        <div>Échéance</div>
-                        <div>Assigné à</div>
-                    </li>
-
-                    {/* Lignes de tâches */}
+                <div className="cards-grid">
                     {filteredTasks.map((task) => {
                         const taskFolders = getTaskFolders(task.id);
                         return (
-                            <li key={task.id} className="app-task-item">
-                                <div className="app-task-id">{task.id}</div>
-                                <div
-                                    className="app-task-title"
-                                    title={task.title}
-                                >
-                                    {task.title}
+                            <div key={task.id} className="item-card">
+                                <div className="card-header">
+                                    <h3 className="card-title" title={task.title}>
+                                        {task.title}
+                                    </h3>
+                                    <span className="card-id">#{task.id}</span>
                                 </div>
+
+                                <div className="card-badges">
+                                    <span className="app-task-status" data-status={task.etat}>
+                                        {task.etat || "À FAIRE"}
+                                    </span>
+                                </div>
+                                
                                 <div className="app-task-folders">
                                     {taskFolders.slice(0, 2).map((folder) => (
                                         <span
                                             key={folder.id}
                                             className="app-folder-tag"
-                                            style={{
-                                                backgroundColor:
-                                                    folder.color || "#ccc",
-                                            }}
+                                            style={{ backgroundColor: folder.color || "#ccc" }}
                                         >
                                             {folder.title}
                                         </span>
@@ -119,51 +106,39 @@ export default function TaskList({ tasks }) {
                                         </span>
                                     )}
                                 </div>
-                                <div>
-                                    <span
-                                        className="app-task-status"
-                                        data-status={task.etat}
-                                    >
-                                        {task.etat || "À FAIRE"}
-                                    </span>
+
+                                <div className="card-details">
+                                    <div className="detail-row">
+                                        <span className="detail-label">Création:</span>
+                                        <span>{task.date_creation ? new Date(task.date_creation).toLocaleDateString() : "-"}</span>
+                                    </div>
+                                    <div className="detail-row highlight-date">
+                                        <span className="detail-label">Échéance:</span>
+                                        <span>{task.date_echeance ? new Date(task.date_echeance).toLocaleDateString() : "-"}</span>
+                                    </div>
                                 </div>
-                                <div className="app-task-date">
-                                    {task.date_creation
-                                        ? new Date(
-                                              task.date_creation,
-                                          ).toLocaleDateString()
-                                        : "-"}
+
+                                <div className="card-footer">
+                                    <div className="app-task-assignee">
+                                        {task.equipiers && task.equipiers.length > 0 ? (
+                                            <>
+                                                <div className="app-avatar" title={task.equipiers.map(e => e.name).join(", ")}>
+                                                    {task.equipiers[0].name.charAt(0).toUpperCase()}
+                                                </div>
+                                                <span className="assignee-name">
+                                                    {task.equipiers[0].name}
+                                                    {task.equipiers.length > 1 && ` (+${task.equipiers.length - 1})`}
+                                                </span>
+                                            </>
+                                        ) : (
+                                            <span className="no-assignee">Non assigné</span>
+                                        )}
+                                    </div>
                                 </div>
-                                <div className="app-task-date">
-                                    {task.date_echeance
-                                        ? new Date(
-                                              task.date_echeance,
-                                          ).toLocaleDateString()
-                                        : "-"}
-                                </div>
-                                <div className="app-task-assignee">
-                                    {task.equipiers &&
-                                    task.equipiers.length > 0 ? (
-                                        <>
-                                            <div className="app-avatar">
-                                                {task.equipiers[0].name
-                                                    .charAt(0)
-                                                    .toUpperCase()}
-                                            </div>
-                                            <span>
-                                                {task.equipiers
-                                                    .map((e) => e.name)
-                                                    .join(", ")}
-                                            </span>
-                                        </>
-                                    ) : (
-                                        "Non assigné"
-                                    )}
-                                </div>
-                            </li>
+                            </div>
                         );
                     })}
-                </ul>
+                </div>
             )}
         </div>
     );
