@@ -1,19 +1,20 @@
 import React, { useState } from "react";
 import "../FoldersList.css";
-import Backup from "../../../data/backup.json";
 
-export default function FoldersList({ folders }) {
+export default function FoldersList({ folders, relations }) {
     const [searchTerm, setSearchTerm] = useState("");
 
     let filteredFolders = folders.filter((folder) => {
         const titleMatch = folder.title ? folder.title.toLowerCase() : "";
         const idMatch = folder.id ? folder.id.toString() : "";
         const searchTarget = searchTerm.toLowerCase();
-        return titleMatch.includes(searchTarget) || idMatch.includes(searchTarget);
+        return (
+            titleMatch.includes(searchTarget) || idMatch.includes(searchTarget)
+        );
     });
 
     const getFolderTasksCount = (folderId) => {
-        return Backup.relations.filter((rel) => rel.dossier === folderId).length;
+        return relations.filter((rel) => rel.dossier === folderId).length;
     };
 
     return (
@@ -35,7 +36,13 @@ export default function FoldersList({ folders }) {
             ) : (
                 <div className="cards-grid">
                     {filteredFolders.map((folder) => (
-                        <div key={folder.id} className="item-card folder-card" style={{ borderTop: `4px solid ${folder.color || "#0366d6"}` }}>
+                        <div
+                            key={folder.id}
+                            className="item-card folder-card"
+                            style={{
+                                borderTop: `4px solid ${folder.color || "#0366d6"}`,
+                            }}
+                        >
                             <div className="card-header">
                                 <h3 className="card-title" title={folder.title}>
                                     {folder.title}
@@ -45,8 +52,12 @@ export default function FoldersList({ folders }) {
 
                             <div className="card-details folder-details">
                                 <div className="detail-row">
-                                    <span className="detail-label">Nombre de tâches:</span>
-                                    <span className="folder-count">{getFolderTasksCount(folder.id)}</span>
+                                    <span className="detail-label">
+                                        Nombre de tâches:
+                                    </span>
+                                    <span className="folder-count">
+                                        {getFolderTasksCount(folder.id)}
+                                    </span>
                                 </div>
                             </div>
                         </div>

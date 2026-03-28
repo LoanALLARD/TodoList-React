@@ -15,6 +15,7 @@ function App() {
 
     const [tasks, setTasks] = useState(Backup.taches);
     const [folders, setFolders] = useState(Backup.dossiers);
+    const [relations, setRelations] = useState(Backup.relations);
 
     // Réinitialisation
     const handleReset = () => {
@@ -27,6 +28,7 @@ function App() {
             // Réinitialisation des données
             setTasks([]);
             setFolders([]);
+            setRelations([]);
         }
     };
 
@@ -42,12 +44,27 @@ function App() {
         }
     };
 
-    const handleCreateTask = (newTaskData) => {
+    const handleCreateTask = (newTaskData, selectedFolders = []) => {
+        const taskId = Date.now().toString();
         const newTask = {
-            id: Date.now().toString(),
+            id: taskId,
             ...newTaskData,
         };
+
+        // Add new relations
+        const newRelations = selectedFolders.map((folderId) => ({
+            id:
+                Date.now().toString() +
+                Math.random().toString(36).substring(2, 9),
+            tache: taskId,
+            dossier: folderId,
+        }));
+
         setTasks([...tasks, newTask]);
+        if (newRelations.length > 0) {
+            setRelations([...relations, ...newRelations]);
+        }
+
         setIsCreateTaskModalOpen(false);
     };
 
@@ -80,9 +97,17 @@ function App() {
             </div>
 
             {viewMode === "tasks" ? (
-                <TaskList tasks={tasks} />
+                <TaskList
+                    tasks={tasks}
+                    folders={folders}
+                    relations={relations}
+                />
             ) : (
-                <FoldersList folders={folders} setFolders={setFolders} />
+                <FoldersList
+                    folders={folders}
+                    relations={relations}
+                    setFolders={setFolders}
+                />
             )}
 
             <Footer onAddClick={handleFooterAddClick} />
@@ -92,7 +117,7 @@ function App() {
                 onClose={() => setIsCreateTaskModalOpen(false)}
                 title="Nouvelle tâche"
             >
-                <TaskForm onSubmit={handleCreateTask} />
+                <TaskForm onSubmit={handleCreateTask} folders={folders} />
             </Modal>
 
             <Modal

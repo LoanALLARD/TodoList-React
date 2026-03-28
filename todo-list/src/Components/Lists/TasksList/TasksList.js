@@ -1,18 +1,17 @@
 import React, { useState } from "react";
 import "../TasksList.css";
 import { ETATS, ETAT_TERMINE } from "../../../data/etats";
-import Backup from "../../../data/backup.json";
 
-export default function TaskList({ tasks }) {
+export default function TaskList({ tasks, folders, relations }) {
     const [searchTerm, setSearchTerm] = useState("");
     const [statusFilter, setStatusFilter] = useState("NON_TERMINEES");
 
     const getTaskFolders = (taskId) => {
-        const relatedFolderIds = Backup.relations
+        const relatedFolderIds = relations
             .filter((rel) => rel.tache === taskId)
             .map((rel) => rel.dossier);
 
-        return Backup.dossiers.filter((d) => relatedFolderIds.includes(d.id));
+        return folders.filter((d) => relatedFolderIds.includes(d.id));
     };
 
     let filteredTasks = tasks.filter((task) => {
@@ -78,24 +77,33 @@ export default function TaskList({ tasks }) {
                         return (
                             <div key={task.id} className="item-card">
                                 <div className="card-header">
-                                    <h3 className="card-title" title={task.title}>
+                                    <h3
+                                        className="card-title"
+                                        title={task.title}
+                                    >
                                         {task.title}
                                     </h3>
                                     <span className="card-id">#{task.id}</span>
                                 </div>
 
                                 <div className="card-badges">
-                                    <span className="app-task-status" data-status={task.etat}>
+                                    <span
+                                        className="app-task-status"
+                                        data-status={task.etat}
+                                    >
                                         {task.etat || "À FAIRE"}
                                     </span>
                                 </div>
-                                
+
                                 <div className="app-task-folders">
                                     {taskFolders.slice(0, 2).map((folder) => (
                                         <span
                                             key={folder.id}
                                             className="app-folder-tag"
-                                            style={{ backgroundColor: folder.color || "#ccc" }}
+                                            style={{
+                                                backgroundColor:
+                                                    folder.color || "#ccc",
+                                            }}
                                         >
                                             {folder.title}
                                         </span>
@@ -109,29 +117,57 @@ export default function TaskList({ tasks }) {
 
                                 <div className="card-details">
                                     <div className="detail-row">
-                                        <span className="detail-label">Création:</span>
-                                        <span>{task.date_creation ? new Date(task.date_creation).toLocaleDateString() : "-"}</span>
+                                        <span className="detail-label">
+                                            Création:
+                                        </span>
+                                        <span>
+                                            {task.date_creation
+                                                ? new Date(
+                                                      task.date_creation,
+                                                  ).toLocaleDateString()
+                                                : "-"}
+                                        </span>
                                     </div>
                                     <div className="detail-row highlight-date">
-                                        <span className="detail-label">Échéance:</span>
-                                        <span>{task.date_echeance ? new Date(task.date_echeance).toLocaleDateString() : "-"}</span>
+                                        <span className="detail-label">
+                                            Échéance:
+                                        </span>
+                                        <span>
+                                            {task.date_echeance
+                                                ? new Date(
+                                                      task.date_echeance,
+                                                  ).toLocaleDateString()
+                                                : "-"}
+                                        </span>
                                     </div>
                                 </div>
 
                                 <div className="card-footer">
                                     <div className="app-task-assignee">
-                                        {task.equipiers && task.equipiers.length > 0 ? (
+                                        {task.equipiers &&
+                                        task.equipiers.length > 0 ? (
                                             <>
-                                                <div className="app-avatar" title={task.equipiers.map(e => e.name).join(", ")}>
-                                                    {task.equipiers[0].name.charAt(0).toUpperCase()}
+                                                <div
+                                                    className="app-avatar"
+                                                    title={task.equipiers
+                                                        .map((e) => e.name)
+                                                        .join(", ")}
+                                                >
+                                                    {task.equipiers[0].name
+                                                        .charAt(0)
+                                                        .toUpperCase()}
                                                 </div>
                                                 <span className="assignee-name">
                                                     {task.equipiers[0].name}
-                                                    {task.equipiers.length > 1 && ` (+${task.equipiers.length - 1})`}
+                                                    {task.equipiers.length >
+                                                        1 &&
+                                                        ` (+${task.equipiers.length - 1})`}
                                                 </span>
                                             </>
                                         ) : (
-                                            <span className="no-assignee">Non assigné</span>
+                                            <span className="no-assignee">
+                                                Non assigné
+                                            </span>
                                         )}
                                     </div>
                                 </div>

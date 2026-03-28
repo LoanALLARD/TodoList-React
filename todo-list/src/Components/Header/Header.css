@@ -130,3 +130,21 @@
 .reset-button:hover {
     background-color: #ffbdad;
 }
+
+/* Responsive Fixes */
+@media (max-width: 768px) {
+    .header-layout {
+        flex-direction: column;
+    }
+    
+    .chart-wrapper {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .header-top-row {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
+}
