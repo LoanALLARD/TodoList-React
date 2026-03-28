@@ -1,42 +1,43 @@
 .modal-form {
     display: flex;
     flex-direction: column;
-    gap: 15px;
-    margin-top: 15px;
+    gap: var(--spacing-lg);
+    margin-top: var(--spacing-lg);
 }
 
 .form-group {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: var(--spacing-xs);
     text-align: left;
 }
 
 .form-label {
     font-size: 14px;
     font-weight: 600;
-    color: #5e6c84;
+    color: var(--color-neutral-700);
     margin: 0;
 }
 
 .form-input,
 .form-select,
 .form-textarea {
-    padding: 10px;
-    border: 2px solid #dfe1e6;
-    border-radius: 4px;
+    padding: var(--spacing-md);
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-md);
     font-size: 14px;
-    color: #172b4d;
-    background-color: #fafbfc;
+    color: var(--color-neutral-900);
+    background-color: var(--color-background);
     font-family: inherit;
-    transition: background-color 0.2s ease, border-color 0.2s ease;
+    transition: all var(--transition-fast);
 }
 
 .form-input:focus,
 .form-select:focus,
 .form-textarea:focus {
-    background-color: #ffffff;
-    border-color: #4c9aff;
+    background-color: var(--color-background);
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
     outline: none;
 }
 
@@ -48,30 +49,45 @@
 .form-select[multiple] {
     height: auto;
     min-height: 90px;
+    padding: var(--spacing-xs);
 }
 
 .form-color-picker {
     width: 60px;
     height: 40px;
     padding: 2px;
-    border: 2px solid #dfe1e6;
-    border-radius: 4px;
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-md);
     cursor: pointer;
+    transition: border-color var(--transition-fast);
+}
+
+.form-color-picker:focus {
+    border-color: var(--color-primary);
+    outline: none;
 }
 
 .form-submit-btn {
-    background-color: #0052cc;
+    background-color: var(--color-primary);
     color: white;
     border: none;
-    padding: 12px 20px;
-    border-radius: 4px;
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-radius: var(--radius-md);
     font-size: 15px;
-    font-weight: bold;
+    font-weight: 600;
     cursor: pointer;
-    margin-top: 10px;
-    transition: background-color 0.2s ease;
+    margin-top: var(--spacing-sm);
+    transition: all var(--transition-fast);
+    box-shadow: var(--shadow-sm);
 }
 
 .form-submit-btn:hover {
-    background-color: #0065ff;
+    background-color: var(--color-primary-hover);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+}
+
+.form-submit-btn:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-sm);
 }

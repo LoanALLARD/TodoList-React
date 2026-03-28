@@ -1,13 +1,22 @@
 import React, { useState } from "react";
 import "../TasksList.css";
-import { ETATS, ETAT_TERMINE } from "../../../data/etats";
+import { ETAT_TERMINE } from "../../../data/etats";
 import { ChevronRight, ChevronDown, Edit } from "lucide-react";
+import TaskFilters from "./TaskFilters";
 
 export default function TaskList({ tasks, folders, relations, onEditTask }) {
-    // Etats pour les filtres d'affichage
+    // Etats pour la recherche texte et le déploiement
     const [searchTerm, setSearchTerm] = useState("");
-    const [statusFilter, setStatusFilter] = useState("NON_TERMINEES");
     const [expandedTasks, setExpandedTasks] = useState(new Set());
+
+    // ── Tri ──
+    const [sortField, setSortField] = useState("date_echeance");
+    const [sortOrder, setSortOrder] = useState("desc");
+
+    // ── Filtres ──
+    const [selectedFolders, setSelectedFolders] = useState(new Set());
+    const [selectedEtats, setSelectedEtats] = useState(new Set());
+    const [enCoursFilter, setEnCoursFilter] = useState(true);
 
     // Permet de basculer en mode affichage complet
     const toggleExpand = (taskId) => {
@@ -19,6 +28,38 @@ export default function TaskList({ tasks, folders, relations, onEditTask }) {
         });
     };
 
+    // ── Callbacks Tri / Filtre ──
+    const handleSortChange = (field) => {
+        if (field === sortField) {
+            setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"));
+        } else {
+            setSortField(field);
+            setSortOrder(field === "title" ? "asc" : "desc");
+        }
+    };
+
+    const handleToggleFolder = (folderId) => {
+        setSelectedFolders((prev) => {
+            const next = new Set(prev);
+            if (next.has(folderId)) next.delete(folderId);
+            else next.add(folderId);
+            return next;
+        });
+    };
+
+    const handleToggleEtat = (etat) => {
+        setSelectedEtats((prev) => {
+            const next = new Set(prev);
+            if (next.has(etat)) next.delete(etat);
+            else next.add(etat);
+            return next;
+        });
+    };
+
+    const handleToggleEnCours = () => {
+        setEnCoursFilter((prev) => !prev);
+    };
+
     // Récupération des dossiers associés aux tâches
     const getTaskFolders = (taskId) => {
         const relatedFolderIds = relations
@@ -28,30 +69,57 @@ export default function TaskList({ tasks, folders, relations, onEditTask }) {
         return folders.filter((d) => relatedFolderIds.includes(d.id));
     };
 
-    // Filtrage des tâches en fonction de la saisie
+    // ── Filtrage des tâches ──
     let filteredTasks = tasks.filter((task) => {
+        // Recherche texte
         const titleMatch = task.title ? task.title.toLowerCase() : "";
         const idMatch = task.id ? task.id.toString() : "";
         const searchTarget = searchTerm.toLowerCase();
-
         const matchSearch =
             titleMatch.includes(searchTarget) || idMatch.includes(searchTarget);
 
+        // Filtre "En cours" (prioritaire)
         let matchStatus = true;
-        if (statusFilter === "NON_TERMINEES") {
+        if (enCoursFilter) {
             matchStatus = !ETAT_TERMINE.includes(task.etat);
-        } else if (statusFilter !== "") {
-            matchStatus = task.etat === statusFilter;
+        } else if (selectedEtats.size > 0) {
+            matchStatus = selectedEtats.has(task.etat);
         }
 
-        return matchSearch && matchStatus;
+        // Filtre par dossiers
+        let matchFolders = true;
+        if (selectedFolders.size > 0) {
+            const taskFolderIds = relations
+                .filter((rel) => rel.tache === task.id)
+                .map((rel) => rel.dossier);
+            matchFolders = taskFolderIds.some((fid) =>
+                selectedFolders.has(fid),
+            );
+        }
+
+        return matchSearch && matchStatus && matchFolders;
     });
 
-    // Tri des cartes par date d'échéance décroissante
+    // ── Tri dynamique ──
     filteredTasks.sort((a, b) => {
-        if (!a.date_echeance) return 1;
-        if (!b.date_echeance) return -1;
-        return new Date(b.date_echeance) - new Date(a.date_echeance);
+        let valA, valB;
+
+        if (sortField === "title") {
+            valA = (a.title || "").toLowerCase();
+            valB = (b.title || "").toLowerCase();
+            const cmp = valA.localeCompare(valB, "fr");
+            return sortOrder === "asc" ? cmp : -cmp;
+        }
+
+        valA = a[sortField] ? new Date(a[sortField]) : null;
+        valB = b[sortField] ? new Date(b[sortField]) : null;
+
+        if (!valA && !valB) return 0;
+        if (!valA) return 1;
+        if (!valB) return -1;
+
+        const cmp = valA - valB;
+        return sortOrder === "asc" ? cmp : -cmp;
     });
 
     return (
@@ -67,23 +135,20 @@ export default function TaskList({ tasks, folders, relations, onEditTask }) {
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />
-                <select
-                    className="filter-input"
-                    value={statusFilter}
-                    onChange={(e) => setStatusFilter(e.target.value)}
-                >
-                    <option value="">Tous les statuts</option>
-                    <option value="NON_TERMINEES">
-                        Non terminées (Défaut)
-                    </option>
-                    {ETATS &&
-                        Object.values(ETATS).map((etat) => (
-                            <option key={etat} value={etat}>
-                                {etat}
-                            </option>
-                        ))}
-                </select>
             </div>
+
+            <TaskFilters
+                folders={folders}
+                sortField={sortField}
+                sortOrder={sortOrder}
+                onSortChange={handleSortChange}
+                selectedFolders={selectedFolders}
+                onToggleFolder={handleToggleFolder}
+                selectedEtats={selectedEtats}
+                onToggleEtat={handleToggleEtat}
+                enCoursFilter={enCoursFilter}
+                onToggleEnCours={handleToggleEnCours}
+            />
 
             {filteredTasks.length === 0 ? (
                 <p>Aucune tâche à afficher.</p>
