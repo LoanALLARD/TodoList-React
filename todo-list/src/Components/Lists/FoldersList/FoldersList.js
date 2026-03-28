@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import "./TasksList.css";
-import "./FoldersList.css";
-import FolderForm from "./Components/Forms/FolderForm/FolderForm";
-import Modal from "./Components/Modals/Modal";
+import "../TasksList.css";
+import "../FoldersList.css";
+import FolderForm from "../../Forms/FolderForm/FolderForm";
+import Modal from "../../Modals/Modal";
 import { Trash2, Pencil } from "lucide-react";
 
 export default function FoldersList({ initialFolders }) {

@@ -1,5 +1,17 @@
 # TodoList-React
 
+## Informations sur le travail réalisé
+
+### Header
+
+- Utilisations de hook react pour les calculs de totaux
+- Utilisation de Chart.js pour le graphique de répartition des tâches par état
+
+### Listes
+
+- Utilisation de lucid-react pour les icones qui apparaissent
+- Les composants formulaires apparaissent tous dans une modale, qui est elle définie dans le composant `<Modal>`
+
 ## Consignes
 
 Fonctionnalités retenues pour le Todo-List :

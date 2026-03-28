@@ -130,3 +130,22 @@
     color: #5e6c84;
     font-size: 13px;
 }
+.jira-task-folders {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+
+.jira-folder-tag {
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.jira-folder-more {
+    font-size: 12px;
+    color: #5e6c84;
+    padding: 2px;
+}

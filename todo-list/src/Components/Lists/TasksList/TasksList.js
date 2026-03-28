@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import "./TasksList.css";
-import TaskForm from "./Components/Forms/TaskForm/TaskForm";
-import Modal from "./Components/Modals/Modal";
-import { ETATS, ETAT_TERMINE } from "./data/etats";
-import Backup from "./data/backup.json";
+import "../TasksList.css";
+import TaskForm from "../../Forms/TaskForm/TaskForm";
+import Modal from "../../Modals/Modal";
+import { ETATS, ETAT_TERMINE } from "../../../data/etats";
+import Backup from "../../../data/backup.json";
 
 export default function TaskList({ tasks }) {
     const [searchTerm, setSearchTerm] = useState("");
