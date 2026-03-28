@@ -1,11 +1,25 @@
 import React, { useState } from "react";
 import "../TasksList.css";
 import { ETATS, ETAT_TERMINE } from "../../../data/etats";
+import { ChevronRight, ChevronDown, Edit } from "lucide-react";
 
-export default function TaskList({ tasks, folders, relations }) {
+export default function TaskList({ tasks, folders, relations, onEditTask }) {
+    // Etats pour les filtres d'affichage
     const [searchTerm, setSearchTerm] = useState("");
     const [statusFilter, setStatusFilter] = useState("NON_TERMINEES");
+    const [expandedTasks, setExpandedTasks] = useState(new Set());
 
+    // Permet de basculer en mode affichage complet
+    const toggleExpand = (taskId) => {
+        setExpandedTasks((prev) => {
+            const next = new Set(prev);
+            if (next.has(taskId)) next.delete(taskId);
+            else next.add(taskId);
+            return next;
+        });
+    };
+
+    // Récupération des dossiers associés aux tâches
     const getTaskFolders = (taskId) => {
         const relatedFolderIds = relations
             .filter((rel) => rel.tache === taskId)
@@ -14,6 +28,7 @@ export default function TaskList({ tasks, folders, relations }) {
         return folders.filter((d) => relatedFolderIds.includes(d.id));
     };
 
+    // Filtrage des tâches en fonction de la saisie
     let filteredTasks = tasks.filter((task) => {
         const titleMatch = task.title ? task.title.toLowerCase() : "";
         const idMatch = task.id ? task.id.toString() : "";
@@ -32,6 +47,7 @@ export default function TaskList({ tasks, folders, relations }) {
         return matchSearch && matchStatus;
     });
 
+    // Tri des cartes par date d'échéance décroissante
     filteredTasks.sort((a, b) => {
         if (!a.date_echeance) return 1;
         if (!b.date_echeance) return -1;
@@ -39,6 +55,7 @@ export default function TaskList({ tasks, folders, relations }) {
     });
 
     return (
+        // Affichage des tâches sous forme de cartes
         <div className="app-list-container">
             <h2 className="app-list-title">Liste des tâches</h2>
 
@@ -74,17 +91,64 @@ export default function TaskList({ tasks, folders, relations }) {
                 <div className="cards-grid">
                     {filteredTasks.map((task) => {
                         const taskFolders = getTaskFolders(task.id);
+                        const isExpanded = expandedTasks.has(task.id);
+
                         return (
                             <div key={task.id} className="item-card">
                                 <div className="card-header">
-                                    <h3
-                                        className="card-title"
-                                        title={task.title}
+                                    <div
+                                        className="card-title-group"
+                                        style={{
+                                            display: "flex",
+                                            gap: "10px",
+                                            alignItems: "center",
+                                        }}
                                     >
-                                        {task.title}
-                                    </h3>
+                                        <button
+                                            onClick={() =>
+                                                toggleExpand(task.id)
+                                            }
+                                            style={{
+                                                background: "none",
+                                                border: "none",
+                                                cursor: "pointer",
+                                                display: "flex",
+                                                alignItems: "center",
+                                                padding: "0",
+                                            }}
+                                        >
+                                            {isExpanded ? (
+                                                <ChevronDown size={20} />
+                                            ) : (
+                                                <ChevronRight size={20} />
+                                            )}
+                                        </button>
+                                        <h3
+                                            className="card-title"
+                                            title={task.title}
+                                        >
+                                            {task.title}
+                                        </h3>
+                                    </div>
                                     <span className="card-id">#{task.id}</span>
                                 </div>
+
+                                {isExpanded && task.description && (
+                                    <div className="task-description">
+                                        <p
+                                            style={{
+                                                fontSize: "14px",
+                                                color: "#42526e",
+                                                margin: "0",
+                                                fontStyle: "italic",
+                                                wordBreak: "break-word",
+                                                whiteSpace: "pre-wrap",
+                                            }}
+                                        >
+                                            {task.description}
+                                        </p>
+                                    </div>
+                                )}
 
                                 <div className="card-badges">
                                     <span
@@ -96,7 +160,10 @@ export default function TaskList({ tasks, folders, relations }) {
                                 </div>
 
                                 <div className="app-task-folders">
-                                    {taskFolders.slice(0, 2).map((folder) => (
+                                    {(isExpanded
+                                        ? taskFolders
+                                        : taskFolders.slice(0, 2)
+                                    ).map((folder) => (
                                         <span
                                             key={folder.id}
                                             className="app-folder-tag"
@@ -108,7 +175,7 @@ export default function TaskList({ tasks, folders, relations }) {
                                             {folder.title}
                                         </span>
                                     ))}
-                                    {taskFolders.length > 2 && (
+                                    {!isExpanded && taskFolders.length > 2 && (
                                         <span className="app-folder-more">
                                             +{taskFolders.length - 2}
                                         </span>
@@ -116,18 +183,20 @@ export default function TaskList({ tasks, folders, relations }) {
                                 </div>
 
                                 <div className="card-details">
-                                    <div className="detail-row">
-                                        <span className="detail-label">
-                                            Création:
-                                        </span>
-                                        <span>
-                                            {task.date_creation
-                                                ? new Date(
-                                                      task.date_creation,
-                                                  ).toLocaleDateString()
-                                                : "-"}
-                                        </span>
-                                    </div>
+                                    {isExpanded && (
+                                        <div className="detail-row">
+                                            <span className="detail-label">
+                                                Création:
+                                            </span>
+                                            <span>
+                                                {task.date_creation
+                                                    ? new Date(
+                                                          task.date_creation,
+                                                      ).toLocaleDateString()
+                                                    : "-"}
+                                            </span>
+                                        </div>
+                                    )}
                                     <div className="detail-row highlight-date">
                                         <span className="detail-label">
                                             Échéance:
@@ -142,7 +211,14 @@ export default function TaskList({ tasks, folders, relations }) {
                                     </div>
                                 </div>
 
-                                <div className="card-footer">
+                                <div
+                                    className="card-footer"
+                                    style={{
+                                        display: "flex",
+                                        justifyContent: "space-between",
+                                        alignItems: "center",
+                                    }}
+                                >
                                     <div className="app-task-assignee">
                                         {task.equipiers &&
                                         task.equipiers.length > 0 ? (
@@ -170,6 +246,27 @@ export default function TaskList({ tasks, folders, relations }) {
                                             </span>
                                         )}
                                     </div>
+                                    {isExpanded && (
+                                        <button
+                                            onClick={() => onEditTask(task)}
+                                            style={{
+                                                display: "flex",
+                                                alignItems: "center",
+                                                gap: "5px",
+                                                background: "#f4f5f7",
+                                                border: "1px solid #dfe1e6",
+                                                padding: "5px 10px",
+                                                borderRadius: "4px",
+                                                cursor: "pointer",
+                                                fontSize: "13px",
+                                                fontWeight: "600",
+                                                color: "#172b4d",
+                                            }}
+                                        >
+                                            <Edit size={14} />
+                                            Modifier
+                                        </button>
+                                    )}
                                 </div>
                             </div>
                         );

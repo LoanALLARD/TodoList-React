@@ -38,7 +38,7 @@
   }
 }
 
-/* Modal Styles */
+/* Modales */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -46,7 +46,6 @@
   width: 100vw;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.5);
-  /* Noir semi-transparent */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -62,6 +61,8 @@
   max-width: 500px;
   width: 90%;
   color: #172b4d;
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
 .close-button {
@@ -118,11 +119,12 @@
   background-color: #0052cc;
   color: #fff;
 }
+
 .App {
-    padding-bottom: 80px; /* Make room for the floating button */
+  padding-bottom: 80px;
 }
 
-/* Responsive Modals */
+/* Responsive */
 @media (max-width: 600px) {
   .modal-content {
     width: 100%;

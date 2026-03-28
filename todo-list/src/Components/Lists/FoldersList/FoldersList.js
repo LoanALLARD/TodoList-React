@@ -4,6 +4,7 @@ import "../FoldersList.css";
 export default function FoldersList({ folders, relations }) {
     const [searchTerm, setSearchTerm] = useState("");
 
+    // Filtrage des dossiers en fonction de la saisie
     let filteredFolders = folders.filter((folder) => {
         const titleMatch = folder.title ? folder.title.toLowerCase() : "";
         const idMatch = folder.id ? folder.id.toString() : "";
@@ -13,11 +14,13 @@ export default function FoldersList({ folders, relations }) {
         );
     });
 
+    // Permet de compter le nombre de tâches associées au dossier
     const getFolderTasksCount = (folderId) => {
         return relations.filter((rel) => rel.dossier === folderId).length;
     };
 
     return (
+        // Affichage des dossiers sous forme de cartes
         <div className="app-list-container">
             <h2 className="app-list-title">Liste des dossiers</h2>
 

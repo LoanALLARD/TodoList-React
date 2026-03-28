@@ -7,7 +7,7 @@ export default function Header({ tasks, onReset }) {
         (t) => t.etat !== "Réussi" && t.etat !== "Terminé",
     ).length;
 
-    // Répartition
+    // Répartition pour le graphique
     const stats = {};
     Object.values(ETATS).forEach((etat) => {
         stats[etat] = 0;
@@ -21,7 +21,7 @@ export default function Header({ tasks, onReset }) {
         }
     });
 
-    // Colors mapping
+    // Mapping des couleurs en fonction des etats
     const COLORS = {
         [ETATS.NOUVEAU]: "#0052cc",
         [ETATS.EN_COURS]: "#ff991f",

@@ -7,11 +7,10 @@ export default function TaskForm({ onSubmit, folders }) {
         const formData = new FormData(event.target);
         const task = formData.get("task");
         const description = formData.get("description");
-        const creationDate = Date.now();
         const dueDate = formData.get("dueDate");
         const assignees = formData.getAll("assignees");
         const status = formData.get("status");
-        const selectedFolders = formData.getAll("folders"); // Get selected folder IDs
+        const selectedFolders = formData.getAll("folders");
 
         onSubmit(
             {
