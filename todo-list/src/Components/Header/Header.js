@@ -1,6 +1,6 @@
 import Backup from "../../data/backup";
 import { ETATS } from "../../data/etats";
-import "./Header.css";
+import "./header.css";
 
 export default function Header() {
     const totalTasks = Backup.taches.length;
